@@ -14,6 +14,10 @@ import CadUsuario from "./CadUsuario.tsx"
 
 import Layout from "./Layout.tsx"
 
+import Carrinho from "./Carrinho.tsx"
+
+import Vender from "./Vender"
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 const rotas = createBrowserRouter([
@@ -36,6 +40,14 @@ const rotas = createBrowserRouter([
             {
                 path: "cadUsuario",
                 element: <CadUsuario />
+            },
+            {
+                path: "carrinho",
+                element: <Carrinho />
+            },
+            {
+                path: "vender",
+                element: <Vender />
             }
         ],
     },

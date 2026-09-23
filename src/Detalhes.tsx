@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom"
 
 import { useEffect, useState } from "react"
 
+import { toast } from "sonner"
+
 const apiUrl = import.meta.env.VITE_API_URL
 
 export default function Detalhes() {
@@ -33,6 +35,39 @@ export default function Detalhes() {
 
         buscaDados()
     }, [params.produtoId])
+
+    function adicionarAoCarrinho() {
+        if (!produto) {
+            return
+        }
+
+        const carrinhoSalvo = localStorage.getItem("carrinho")
+
+        const carrinho = carrinhoSalvo
+            ? JSON.parse(carrinhoSalvo)
+            : []
+
+        const produtoExistente = carrinho.find(
+            (item: any) => item.IdProduto === produto.IdProduto
+        )
+
+        if (produtoExistente) {
+            produtoExistente.quantidade += 1
+        } else {
+            carrinho.push({
+                IdProduto: produto.IdProduto,
+                Nome: produto.Nome,
+                Autor: produto.Autor,
+                Valor: Number(produto.Valor),
+                Img: produto.Img,
+                quantidade: 1
+            })
+        }
+
+        localStorage.setItem("carrinho", JSON.stringify(carrinho))
+
+        toast.success("Livro adicionado ao carrinho!")
+    }
 
     return (
         <>
@@ -72,7 +107,7 @@ export default function Detalhes() {
                                                 </span>
                                             </div>
                                         </div>
-                                        <button className="w-full py-3.5 px-6 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl transition-colors shadow-lg flex items-center justify-center space-x-2">
+                                        <button onClick={adicionarAoCarrinho} className="w-full py-3.5 px-6 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl transition-colors shadow-lg flex items-center justify-center space-x-2">
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                             </svg>
