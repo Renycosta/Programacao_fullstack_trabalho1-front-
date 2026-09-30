@@ -32,11 +32,14 @@ export default function App() {
         async function buscaUsuario(id: string) {
             try {
                 const response = await fetch(`${apiUrl}/usuarios/${id}`)
+
                 if (!response.ok) {
                     console.error("Usuário não encontrado")
                     return
                 }
+
                 const dados = await response.json()
+
                 logaUsuario(dados)
             } catch (error) {
                 console.error("Erro ao buscar usuário:", error)

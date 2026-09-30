@@ -27,7 +27,7 @@ export default function MinhasCompras() {
         async function buscarCompras() {
             try {
                 const url =
-                    `${apiUrl}/compras/usuario/${usuario.IdUsuario}`
+                    `${apiUrl}/compras/usuario/${usuario?.IdUsuario}`
 
                 console.log("Buscando compras:", url)
 

@@ -44,7 +44,7 @@ export default function Titulo() {
                         </li>
 
                         <li className="pt-3 md:pt-0 mt-2 md:mt-0 border-t border-stone-800/80 md:border-t-0 flex flex-col md:flex-row md:items-center md:space-x-4 rtl:space-x-reverse">
-                            {usuario.IdUsuario ? (
+                            {usuario?.IdUsuario ? (
                                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
                                     
                                     <Link to="/vender" className="block py-2.5 px-3 md:py-2 md:px-0 text-stone-300 rounded-lg hover:bg-stone-800 md:hover:bg-transparent md:hover:text-amber-400 transition-colors">

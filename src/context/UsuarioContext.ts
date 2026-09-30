@@ -1,14 +1,18 @@
-import type { UsuarioType } from '../utils/UsuarioType'
-import { create } from 'zustand'
+import type { UsuarioType } from "../utils/UsuarioType"
+import { create } from "zustand"
 
 type UsuarioStore = {
-    usuario: UsuarioType
+    usuario: UsuarioType | null
     logaUsuario: (usuarioLogado: UsuarioType) => void
     deslogaUsuario: () => void
 }
 
 export const useUsuarioStore = create<UsuarioStore>((set) => ({
-    usuario: {} as UsuarioType,
-    logaUsuario: (usuarioLogado) => set({usuario: usuarioLogado}),
-    deslogaUsuario: () => set({usuario: {} as UsuarioType})
+    usuario: null,
+
+    logaUsuario: (usuarioLogado) =>
+        set({ usuario: usuarioLogado }),
+
+    deslogaUsuario: () =>
+        set({ usuario: null })
 }))
