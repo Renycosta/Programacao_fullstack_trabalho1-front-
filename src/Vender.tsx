@@ -46,7 +46,7 @@ export default function Vender() {
             Nome: nome,
             Autor: autor,
             Ano_public: Number(anoPublic),
-            Peso: Number(peso),
+            Peso: peso,
             Descricao: descricao,
             Img: img,
             Valor: Number(valor),
@@ -86,7 +86,7 @@ export default function Vender() {
             toast.success("Livro cadastrado com sucesso!")
 
             setTimeout(() => {
-                navigate(`/produtos/${resultado.IdProduto}`)
+                navigate(`/`)
             }, 1000)
 
         } catch (error) {
@@ -184,7 +184,7 @@ export default function Vender() {
                                     </label>
 
                                     <input
-                                        type="number"
+                                        type="text"
                                         step="0.01"
                                         value={peso}
                                         onChange={(e) => setPeso(e.target.value)}

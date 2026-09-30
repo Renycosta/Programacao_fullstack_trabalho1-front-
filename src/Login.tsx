@@ -28,60 +28,78 @@ export default function Login() {
 
   async function verificaLogin(data: Inputs) {
     try {
-      const response = await fetch(`${apiUrl}/usuarios/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          Email: data.Email,
-          Senha: data.Senha
+        // Primeiro tenta fazer login como usuário
+        const responseUsuario = await fetch(`${apiUrl}/usuarios/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                Email: data.Email,
+                Senha: data.Senha
+            })
         })
-      })
 
-      const dados = await response.json()
+        const dadosUsuario = await responseUsuario.json()
 
-      console.log("Status:", response.status)
-      console.log("Resposta do login:", dados)
+        // Login de usuário
+        if (responseUsuario.status === 200) {
+            logaUsuario(dadosUsuario)
 
-      if (response.status === 200) {
+            if (data.manter) {
+                localStorage.setItem(
+                    "usuarioKey",
+                    String(dadosUsuario.IdUsuario)
+                )
+            } else {
+                localStorage.removeItem("usuarioKey")
+            }
 
-        // Salva o usuário no Zustand
-        logaUsuario(dados)
-
-        // Se marcou "Manter conectado"
-        if (data.manter) {
-          localStorage.setItem(
-            "usuarioKey",
-            String(dados.IdUsuario)
-          )
-        } else {
-          localStorage.removeItem("usuarioKey")
+            toast.success("Login realizado com sucesso!")
+            navigate("/")
+            return
         }
 
-        toast.success("Login realizado com sucesso!")
+        // Se não for usuário, tenta como administrador
+        const responseAdmin = await fetch(`${apiUrl}/admins/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                Email: data.Email,
+                Senha: data.Senha
+            })
+        })
 
-        navigate("/")
+        const dadosAdmin = await responseAdmin.json()
 
-        return
-      }
+        // Login de administrador
+        if (responseAdmin.status === 200) {
+            if (data.manter) {
+                localStorage.setItem(
+                    "adminKey",
+                    String(dadosAdmin.IdAdmin)
+                )
+            } else {
+                localStorage.removeItem("adminKey")
+            }
 
-      if (response.status === 400) {
-        toast.error(
-          dados.erro || "Login ou senha incorretos"
-        )
+            toast.success("Login de administrador realizado com sucesso!")
 
-        return
-      }
+            navigate("/Admin")
+            return
+        }
 
-      toast.error("Erro ao realizar login")
+        // Nenhum dos dois logins funcionou
+        toast.error("Login ou senha incorretos")
 
     } catch (error) {
-      console.error("Erro no login:", error)
+        console.error("Erro no login:", error)
 
-      toast.error(
-        "Não foi possível conectar ao servidor"
-      )
+        toast.error(
+            "Não foi possível conectar ao servidor"
+        )
     }
   }
 

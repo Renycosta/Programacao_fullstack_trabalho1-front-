@@ -18,6 +18,10 @@ import Carrinho from "./Carrinho.tsx"
 
 import Vender from "./Vender"
 
+import MinhasCompras from "./MinhasCompras"
+
+import Admin from "./Admin"
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 const rotas = createBrowserRouter([
@@ -48,6 +52,14 @@ const rotas = createBrowserRouter([
             {
                 path: "vender",
                 element: <Vender />
+            },
+            {
+                path: "minhascompras",
+                element: <MinhasCompras />
+            },
+            {
+                path: "admin",
+                element: <Admin />
             }
         ],
     },

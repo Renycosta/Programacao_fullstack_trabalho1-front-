@@ -95,10 +95,7 @@ export default function Carrinho() {
 
     async function finalizarCompra() {
         if (!usuario?.IdUsuario) {
-            toast.error(
-                "Você precisa estar logado para finalizar a compra."
-            )
-
+            toast.error("Você precisa estar logado para finalizar a compra.")
             navigate("/login")
             return
         }
@@ -109,106 +106,99 @@ export default function Carrinho() {
         }
 
         try {
-            /*
-             * 1 - Cria a compra
-             */
-            const responseCompra = await fetch(
-                `${apiUrl}/compras`,
-                {
+            // 1. Criar a compra
+            const urlCompra = `${apiUrl}/compras`
+
+            console.log("Enviando compra para:", urlCompra)
+
+            const responseCompra = await fetch(urlCompra, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    Valor_total: Number(total.toFixed(2)),
+                    Usuario_Id: usuario.IdUsuario
+                })
+            })
+
+            console.log("Status da compra:", responseCompra.status)
+
+            const textoCompra = await responseCompra.text()
+
+            console.log("Resposta da compra:", textoCompra)
+
+            if (!responseCompra.ok) {
+                toast.error("Erro ao criar a compra.")
+                return
+            }
+
+            const compra = JSON.parse(textoCompra)
+
+            const IdCompra = compra.IdCompra
+
+            if (!IdCompra) {
+                toast.error("A API não retornou o ID da compra.")
+                return
+            }
+
+            // 2. Adicionar os produtos à compra
+            for (const produto of carrinho) {
+
+                const urlProduto =
+                    `${apiUrl}/produtos_das_compras`
+
+                console.log(
+                    "Adicionando produto:",
+                    produto.IdProduto,
+                    "para compra:",
+                    IdCompra
+                )
+
+                const responseProduto = await fetch(urlProduto, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        Valor_total: Number(total.toFixed(2)),
-                        Usuario_Id: usuario.IdUsuario
+                        Produto_Id: produto.IdProduto,
+                        Compra_Id: IdCompra
                     })
-                }
-            )
+                })
 
-            const compra = await responseCompra.json()
-
-            if (!responseCompra.ok) {
-                console.error(compra)
-
-                toast.error(
-                    typeof compra.erro === "string"
-                        ? compra.erro
-                        : "Erro ao criar a compra."
+                console.log(
+                    "Status produto da compra:",
+                    responseProduto.status
                 )
 
-                return
-            }
+                const textoProduto = await responseProduto.text()
 
-            /*
-             * 2 - Pega o ID da compra criada
-             */
-            const IdCompra = compra.IdCompra
-
-            /*
-             * 3 - Adiciona cada produto à compra
-             */
-            for (const produto of carrinho) {
-                const responseProduto =
-                    await fetch(
-                        `${apiUrl}/produtos_da_compra`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                Produto_Id:
-                                    produto.IdProduto,
-
-                                Compra_Id:
-                                    IdCompra
-                            })
-                        }
-                    )
-
-                const resultadoProduto =
-                    await responseProduto.json()
+                console.log(
+                    "Resposta produto da compra:",
+                    textoProduto
+                )
 
                 if (!responseProduto.ok) {
-                    console.error(resultadoProduto)
-
                     toast.error(
                         `Erro ao adicionar "${produto.Nome}" à compra.`
                     )
-
                     return
                 }
+
+                JSON.parse(textoProduto)
             }
 
-            /*
-             * 4 - Compra finalizada
-             */
-            toast.success(
-                "Compra realizada com sucesso!"
-            )
+            toast.success("Compra realizada com sucesso!")
 
-            /*
-             * 5 - Limpa o carrinho
-             */
-            limparCarrinho()
+            localStorage.removeItem("carrinho")
 
-            /*
-             * 6 - Volta para a página inicial
-             */
             setTimeout(() => {
                 navigate("/")
             }, 1000)
 
         } catch (error) {
-            console.error(
-                "Erro ao finalizar compra:",
-                error
-            )
-
-            toast.error(
-                "Não foi possível finalizar a compra."
-            )
+            console.error("Erro ao finalizar compra:", error)
+            toast.error("Não foi possível finalizar a compra.")
         }
     }
 
