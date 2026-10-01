@@ -106,7 +106,6 @@ export default function Carrinho() {
         }
 
         try {
-            // 1. Criar a compra
             const urlCompra = `${apiUrl}/compras`
 
             console.log("Enviando compra para:", urlCompra)
@@ -142,9 +141,7 @@ export default function Carrinho() {
                 return
             }
 
-            // 2. Adicionar os produtos à compra
             for (const produto of carrinho) {
-
                 const urlProduto =
                     `${apiUrl}/produtos_das_compras`
 
@@ -204,72 +201,42 @@ export default function Carrinho() {
 
     return (
         <div className="min-h-screen bg-stone-950 py-10 px-4">
-
             <div className="max-w-6xl mx-auto">
-
                 <h1 className="text-3xl font-bold text-amber-100 mb-8">
                     Meu carrinho
                 </h1>
-
                 {carrinho.length === 0 ? (
-
                     <div className="bg-stone-900 border border-stone-800 rounded-2xl p-10 text-center">
-
                         <div className="text-5xl mb-4">
                             🛒
                         </div>
-
                         <h2 className="text-xl font-bold text-stone-200 mb-2">
                             Seu carrinho está vazio
                         </h2>
-
                         <p className="text-stone-400 mb-6">
                             Adicione alguns livros para começar sua compra.
                         </p>
-
-                        <button
-                            onClick={() => navigate("/")}
-                            className="bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold px-6 py-3 rounded-lg transition-colors"
-                        >
+                        <button onClick={() => navigate("/")} className="bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold px-6 py-3 rounded-lg transition-colors">
                             Ver livros
                         </button>
-
                     </div>
-
                 ) : (
-
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                        {/* Produtos */}
                         <div className="lg:col-span-2 space-y-4">
-
                             {carrinho.map((produto) => (
-
-                                <div
-                                    key={produto.IdProduto}
-                                    className="bg-stone-900 border border-stone-800 rounded-xl p-4 flex gap-4"
-                                >
-
+                                <div key={produto.IdProduto} className="bg-stone-900 border border-stone-800 rounded-xl p-4 flex gap-4">
                                     <div className="w-24 h-32 bg-stone-950 rounded-lg overflow-hidden flex-shrink-0">
                                         {produto.Img && (
-                                            <img
-                                                src={produto.Img}
-                                                alt={produto.Nome}
-                                                className="w-full h-full object-contain"
-                                            />
+                                            <img src={produto.Img} alt={produto.Nome} className="w-full h-full object-contain"/>
                                         )}
                                     </div>
-
                                     <div className="flex-1">
-
                                         <h2 className="text-lg font-bold text-amber-100">
                                             {produto.Nome}
                                         </h2>
-
                                         <p className="text-sm text-stone-400">
                                             {produto.Autor}
                                         </p>
-
                                         <p className="text-amber-500 font-bold mt-2">
                                             R$ {Number(produto.Valor).toLocaleString(
                                                 "pt-BR",
@@ -278,24 +245,19 @@ export default function Carrinho() {
                                                 }
                                             )}
                                         </p>
-
                                         <div className="flex items-center gap-3 mt-4">
-
                                             <button
                                                 onClick={() =>
                                                     diminuirQuantidade(
                                                         produto.IdProduto
                                                     )
                                                 }
-                                                className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200"
-                                            >
+                                                className="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200">
                                                 -
                                             </button>
-
                                             <span className="text-stone-200 font-bold">
                                                 {produto.quantidade}
                                             </span>
-
                                             <button
                                                 onClick={() =>
                                                     aumentarQuantidade(
@@ -306,7 +268,6 @@ export default function Carrinho() {
                                             >
                                                 +
                                             </button>
-
                                             <button
                                                 onClick={() =>
                                                     removerProduto(
@@ -317,44 +278,29 @@ export default function Carrinho() {
                                             >
                                                 Remover
                                             </button>
-
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             ))}
-
                         </div>
-
-                        {/* Resumo */}
                         <div className="lg:col-span-1">
-
                             <div className="bg-stone-900 border border-stone-800 rounded-xl p-6 sticky top-6">
-
                                 <h2 className="text-xl font-bold text-stone-100 mb-6">
                                     Resumo da compra
                                 </h2>
-
                                 <div className="flex justify-between text-sm text-stone-400 mb-3">
                                     <span>
                                         Produtos
                                     </span>
-
                                     <span>
                                         {quantidadeProdutos}
                                     </span>
                                 </div>
-
                                 <div className="border-t border-stone-800 pt-4 mt-4">
-
                                     <div className="flex justify-between items-center">
-
                                         <span className="text-stone-300 font-medium">
                                             Total
                                         </span>
-
                                         <span className="text-2xl font-bold text-amber-500">
                                             R$ {total.toLocaleString(
                                                 "pt-BR",
@@ -363,34 +309,20 @@ export default function Carrinho() {
                                                 }
                                             )}
                                         </span>
-
                                     </div>
-
                                 </div>
-
-                                <button
-                                    onClick={finalizarCompra}
-                                    className="w-full mt-6 py-3.5 px-6 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl transition-colors"
-                                >
+                                <button onClick={finalizarCompra} className="w-full mt-6 py-3.5 px-6 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl transition-colors">
                                     Finalizar compra
                                 </button>
 
-                                <button
-                                    onClick={limparCarrinho}
-                                    className="w-full mt-3 py-3 px-6 border border-stone-700 hover:bg-stone-800 text-stone-400 hover:text-stone-200 rounded-xl transition-colors"
-                                >
+                                <button onClick={limparCarrinho} className="w-full mt-3 py-3 px-6 border border-stone-700 hover:bg-stone-800 text-stone-400 hover:text-stone-200 rounded-xl transition-colors">
                                     Limpar carrinho
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
                 )}
-
             </div>
-
         </div>
     )
 }

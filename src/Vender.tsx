@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 import { useUsuarioStore } from "./context/UsuarioContext.ts"
+import type { CategoriaType } from "./utils/CategoriaType"
 
 const apiUrl = import.meta.env.VITE_API_URL
 
@@ -18,7 +19,30 @@ export default function Vender() {
     const [valor, setValor] = useState("")
     const [categoriaId, setCategoriaId] = useState("")
 
+    const [categorias, setCategorias] = useState<CategoriaType[]>([])
     const [carregando, setCarregando] = useState(false)
+
+    useEffect(() => {
+        async function buscaCategorias() {
+            try {
+                const response = await fetch(`${apiUrl}/categorias`)
+
+                if (!response.ok) {
+                    toast.error("Não foi possível carregar as categorias.")
+                    return
+                }
+
+                const dados: CategoriaType[] = await response.json()
+
+                setCategorias(dados)
+            } catch (error) {
+                console.error("Erro ao buscar categorias:", error)
+                toast.error("Não foi possível carregar as categorias.")
+            }
+        }
+
+        buscaCategorias()
+    }, [])
 
     async function cadastrarLivro(event: React.FormEvent) {
         event.preventDefault()
@@ -86,9 +110,8 @@ export default function Vender() {
             toast.success("Livro cadastrado com sucesso!")
 
             setTimeout(() => {
-                navigate(`/`)
+                navigate("/")
             }, 1000)
-
         } catch (error) {
             console.error("Erro ao cadastrar livro:", error)
             toast.error("Não foi possível cadastrar o livro.")
@@ -100,10 +123,8 @@ export default function Vender() {
     return (
         <div className="min-h-screen bg-stone-950 py-10 px-4">
             <div className="max-w-4xl mx-auto">
-
                 <div className="bg-stone-900 border border-stone-800 rounded-2xl shadow-2xl overflow-hidden">
 
-                    {/* Cabeçalho */}
                     <div className="p-6 md:p-8 border-b border-stone-800">
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-900/40 border border-amber-800">
@@ -124,7 +145,6 @@ export default function Vender() {
 
                     <form onSubmit={cadastrarLivro} className="p-6 md:p-8">
 
-                        {/* Informações principais */}
                         <div className="mb-8">
                             <h2 className="text-lg font-bold text-stone-100 mb-4">
                                 Informações do livro
@@ -132,7 +152,6 @@ export default function Vender() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                                {/* Nome */}
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Nome do livro *
@@ -147,7 +166,6 @@ export default function Vender() {
                                     />
                                 </div>
 
-                                {/* Autor */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Autor *
@@ -162,7 +180,6 @@ export default function Vender() {
                                     />
                                 </div>
 
-                                {/* Ano */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Ano de publicação *
@@ -177,7 +194,6 @@ export default function Vender() {
                                     />
                                 </div>
 
-                                {/* Peso */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Peso *
@@ -185,7 +201,6 @@ export default function Vender() {
 
                                     <input
                                         type="text"
-                                        step="0.01"
                                         value={peso}
                                         onChange={(e) => setPeso(e.target.value)}
                                         placeholder="Ex.: 0.350"
@@ -193,24 +208,34 @@ export default function Vender() {
                                     />
                                 </div>
 
-                                {/* Categoria */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Categoria *
                                     </label>
 
-                                    <input
-                                        type="number"
+                                    <select
                                         value={categoriaId}
                                         onChange={(e) => setCategoriaId(e.target.value)}
-                                        placeholder="ID da categoria"
-                                        className="w-full rounded-lg bg-stone-950 border border-stone-700 px-4 py-3 text-stone-200 placeholder-stone-600 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
-                                    />
+                                        className="w-full rounded-lg bg-stone-950 border border-stone-700 px-4 py-3 text-stone-200 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
+                                    >
+                                        <option value="">
+                                            Selecione uma categoria
+                                        </option>
+
+                                        {categorias.map((categoria) => (
+                                            <option
+                                                key={categoria.IdCategoria}
+                                                value={categoria.IdCategoria}
+                                            >
+                                                {categoria.Descricao}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
+
                             </div>
                         </div>
 
-                        {/* Preço e imagem */}
                         <div className="mb-8">
                             <h2 className="text-lg font-bold text-stone-100 mb-4">
                                 Venda
@@ -218,7 +243,6 @@ export default function Vender() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-                                {/* Valor */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         Valor *
@@ -241,7 +265,6 @@ export default function Vender() {
                                     </div>
                                 </div>
 
-                                {/* Imagem */}
                                 <div>
                                     <label className="block text-sm font-medium text-stone-300 mb-2">
                                         URL da imagem
@@ -255,10 +278,10 @@ export default function Vender() {
                                         className="w-full rounded-lg bg-stone-950 border border-stone-700 px-4 py-3 text-stone-200 placeholder-stone-600 outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600"
                                     />
                                 </div>
+
                             </div>
                         </div>
 
-                        {/* Descrição */}
                         <div className="mb-8">
                             <label className="block text-sm font-medium text-stone-300 mb-2">
                                 Descrição *
@@ -273,7 +296,6 @@ export default function Vender() {
                             />
                         </div>
 
-                        {/* Informação da IA */}
                         <div className="mb-8 p-4 rounded-xl border border-amber-900/50 bg-amber-950/20">
                             <div className="flex gap-3">
                                 <span className="text-xl">
@@ -293,7 +315,6 @@ export default function Vender() {
                             </div>
                         </div>
 
-                        {/* Botões */}
                         <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end">
 
                             <button
@@ -315,6 +336,7 @@ export default function Vender() {
                             </button>
 
                         </div>
+
                     </form>
                 </div>
             </div>

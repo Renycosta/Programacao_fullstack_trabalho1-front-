@@ -1,1 +1,5 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+.campo {
+    @apply w-full bg-stone-950 border border-stone-800 text-stone-100 rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500;
+}

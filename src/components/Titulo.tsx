@@ -27,14 +27,12 @@ export default function Titulo() {
                         Livraria Gato preto
                     </span>
                 </Link>
-
                 <button data-collapse-toggle="navbar-solid-bg" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-stone-400 rounded-lg md:hidden hover:bg-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-700 transition-colors" aria-controls="navbar-solid-bg" aria-expanded="false">
                     <span className="sr-only">Abrir menu principal</span>
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
                     </svg>
                 </button>
-
                 <div className="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
                     <ul className="flex flex-col md:flex-row md:items-center font-medium mt-4 md:mt-0 p-4 md:p-0 rounded-xl bg-stone-900/90 md:bg-transparent border border-stone-800/80 md:border-0 md:space-x-6 rtl:space-x-reverse shadow-lg md:shadow-none">
                         <li>
@@ -42,30 +40,24 @@ export default function Titulo() {
                                 Livros
                             </Link>
                         </li>
-
                         <li className="pt-3 md:pt-0 mt-2 md:mt-0 border-t border-stone-800/80 md:border-t-0 flex flex-col md:flex-row md:items-center md:space-x-4 rtl:space-x-reverse">
                             {usuario?.IdUsuario ? (
                                 <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-                                    
                                     <Link to="/vender" className="block py-2.5 px-3 md:py-2 md:px-0 text-stone-300 rounded-lg hover:bg-stone-800 md:hover:bg-transparent md:hover:text-amber-400 transition-colors">
                                         Vender
                                     </Link>
-
                                     <Link to="/carrinho" className="block py-2.5 px-3 md:py-2 md:px-0 text-stone-300 rounded-lg hover:bg-stone-800 md:hover:bg-transparent md:hover:text-amber-400 transition-colors">
                                         Carrinho
                                     </Link>
-
                                     <Link to="/minhasCompras" className="block py-2.5 px-3 md:py-2 md:px-0 text-stone-300 rounded-lg hover:bg-stone-800 md:hover:bg-transparent md:hover:text-amber-400 transition-colors">
                                         Minhas Compras
                                     </Link>
-
                                     <div className="flex items-center space-x-2 px-3 py-1.5 bg-stone-900/80 border border-stone-800 rounded-lg">
                                         <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
-                                        <span className="text-amber-100 font-medium text-sm">
+                                        <Link to="/info" className="text-amber-100 font-medium text-sm">
                                             {usuario.Nome}
-                                        </span>
+                                        </Link>
                                     </div>
-
                                     <button onClick={usuarioSair} className="text-left md:text-center text-sm font-medium text-stone-400 hover:text-red-400 transition-colors py-1 md:py-0">
                                         Sair
                                     </button>
