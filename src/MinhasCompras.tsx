@@ -180,15 +180,6 @@ export default function MinhasCompras() {
                                     <p className="text-sm text-stone-400">
                                         Compra realizada com sucesso.
                                     </p>
-                                    <button
-                                        onClick={() =>
-                                            navigate(
-                                                `/compras/${compra.IdCompra}`
-                                            )
-                                        }
-                                        className="border border-stone-700 hover:bg-stone-800 text-stone-300 hover:text-stone-100 px-5 py-2 rounded-lg transition-colors">
-                                        Ver detalhes
-                                    </button>
                                 </div>
                             </div>
                         ))}

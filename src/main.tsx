@@ -13,6 +13,7 @@ import Vender from "./Vender"
 import MinhasCompras from "./MinhasCompras"
 import Admin from "./Admin"
 import Info from "./Info.tsx"
+import Dashboard from "./Dashboard"
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
@@ -56,6 +57,10 @@ const rotas = createBrowserRouter([
             {
                 path: "info",
                 element: <Info />
+            },
+            {
+                path: "dashboard",
+                element: <Dashboard />
             }
         ],
     },
